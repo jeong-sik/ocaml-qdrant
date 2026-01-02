@@ -1,0 +1,5 @@
+(library
+ (name qdrant)
+ (public_name qdrant)
+ (libraries lwt lwt.unix cohttp-lwt-unix yojson uri)
+ (preprocess (pps lwt_ppx)))

@@ -1,0 +1,4 @@
+(test
+ (name test_qdrant)
+ (libraries qdrant alcotest lwt lwt.unix)
+ (preprocess (pps lwt_ppx)))

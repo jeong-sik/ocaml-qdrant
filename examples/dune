@@ -1,0 +1,4 @@
+(executable
+ (name basic)
+ (libraries qdrant lwt lwt.unix)
+ (preprocess (pps lwt_ppx)))
