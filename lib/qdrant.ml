@@ -134,10 +134,17 @@ let make_request ~config ~meth ~path ?(body=`Null) () =
 
 (** Check if Qdrant is healthy *)
 let health ?(config=default_config) () =
-  let* result = make_request ~config ~meth:`GET ~path:"/" () in
+  let* result = make_request ~config ~meth:`GET ~path:"/healthz" () in
   match result with
   | Ok _ -> Lwt.return_ok true
   | Error (ConnectionError _) -> Lwt.return_ok false
+  | Error (NotFound _) ->
+    (* Fallback to root for older versions *)
+    let* result = make_request ~config ~meth:`GET ~path:"/" () in
+    (match result with
+     | Ok _ -> Lwt.return_ok true
+     | Error (ConnectionError _) -> Lwt.return_ok false
+     | Error e -> Lwt.return_error e)
   | Error e -> Lwt.return_error e
 
 (** Get Qdrant version *)
